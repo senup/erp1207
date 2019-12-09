@@ -14,6 +14,7 @@ import java.util.Scanner;
 /**
  * mp生成器
  * @author LJH
+ * https://mp.baomidou.com/config/generator-config.html#基本配置
  *
  */
 public class CodeGenerator {
@@ -90,8 +91,8 @@ public class CodeGenerator {
         //要设置生成哪些表 如果不设置就是生成所有的表
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix(pc.getModuleName() + "_");
-//        strategy.setTablePrefix("sys_");
+//        strategy.setTablePrefix(pc.getModuleName() + "_");
+        strategy.setTablePrefix("sys_");//输入的表名去除前缀
         mpg.setStrategy(strategy);
         mpg.execute();
     }
