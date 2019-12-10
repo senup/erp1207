@@ -38,6 +38,7 @@ public class LogLoginController {
         queryWrapper.like(StringUtils.isNotBlank(logLoginVo.getLoginip()),"loginip",logLoginVo.getLoginip());
         queryWrapper.ge(logLoginVo.getStartTime()!=null,"logintime",logLoginVo.getStartTime());
         queryWrapper.le(logLoginVo.getEndTime()!=null,"logintime",logLoginVo.getEndTime());
+        queryWrapper.orderByDesc("logintime");
         //添加条件
         this.logLoginService.page(page, queryWrapper);
         //参数一 总数 参数二 数据

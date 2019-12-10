@@ -52,7 +52,7 @@
         </div>
         <div class="layui-form-item">
            <div class="layui-input-block" style="text-align: center">
-               <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1"><span class="layui-icon layui-icon-search"></span>查询</button>
+               <button type="button" class="layui-btn" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
                <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh"></span>重置</button>
            </div>
         </div>
@@ -101,6 +101,7 @@
                 ,layEvent: 'LAYTABLE_TIPS'
                 ,icon: 'layui-icon-tips'
             }]
+            ,hegiht:'full-220'
             ,title: '用户登陆日志数据表'
             ,cols: [ [
                 {type: 'checkbox', fixed: 'left'}
@@ -112,6 +113,18 @@
             ] ]
             ,page: true
         });
+
+        //模糊查询
+        form.on("submit(doSearch)",function (data) {
+            tableIns.reload({
+                where : data.field,
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+            
+        })
 
     })
 </script>
