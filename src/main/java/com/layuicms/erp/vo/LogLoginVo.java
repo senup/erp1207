@@ -17,6 +17,8 @@ public class LogLoginVo extends LogLogin {
     private Integer page=1;
     private Integer limit=10;
 
+    private Integer[] ids;//接受多个id
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
