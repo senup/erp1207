@@ -41,7 +41,7 @@ public class LogLoginController {
         //添加条件
         this.logLoginService.page(page, queryWrapper);
         //参数一 总数 参数二 数据
-        return new DataGridView(page.getTotal(),page.getRecords());
+        return new DataGridView(0,"",page.getTotal(),page.getRecords());
     }
 }
 
