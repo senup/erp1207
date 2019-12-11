@@ -40,4 +40,13 @@ public class SystemController {
     public String toLogLoginManager(){
         return "system/index/loginfo/loginfoManager";
     }
+
+
+    /*
+    跳转到公告管理
+    */
+    @RequestMapping("toNoticeManager")
+    public String toNoticeManager(){
+        return "system/index/notice/NoticeManager";
+    }
 }
