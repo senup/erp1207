@@ -9,6 +9,7 @@ import com.layuicms.erp.common.WebUtils;
 import com.layuicms.erp.domain.Notice;
 import com.layuicms.erp.domain.User;
 import com.layuicms.erp.service.INoticeService;
+import com.layuicms.erp.vo.LogLoginVo;
 import com.layuicms.erp.vo.NoticeVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -74,6 +78,43 @@ public class NoticeController {
             e.printStackTrace();
             return ResultObj.UPDATE_ERROR;
         }
+    }
+
+
+
+
+
+    //删除
+    @RequestMapping("/deleteNotice")
+    public ResultObj deleteNotice(Integer id){
+        try {
+            //“IDEA try catch的快捷键是选中后 ctrl+alt+t ”
+            this.noticeService.removeById(id);
+            return ResultObj.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.DELETE_ERROR;
+        }
+
+    }
+
+
+
+    //批量删除
+    @RequestMapping("/batchDeleteNotice")
+    public ResultObj batchDeleteNotice(NoticeVo noticeVo){
+        try {
+            Collection<Serializable> idList = new ArrayList<Serializable>();
+            for ( Integer id : noticeVo.getIds() ) {
+                idList.add(id);
+            }
+            this.noticeService.removeByIds(idList);
+            return ResultObj.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.DELETE_ERROR;
+        }
+
     }
 }
 

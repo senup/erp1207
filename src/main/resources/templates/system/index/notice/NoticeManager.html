@@ -260,10 +260,10 @@
 
 
         //删除
-        function deleteInfo(data){
-            layer.confirm('你确定要删除这条数据吗?', {icon: 3, title:'提示'}, function(index){
+        function deleteNotice(data){
+            layer.confirm('你确定要删除【'+data.title+'】这条公告吗?', {icon: 3, title:'提示'}, function(index){
                 //do something
-                $.post("/log/deleteNotice",{id:data.id},function(res){
+                $.post("/notice/deleteNotice",{id:data.id},function(res){
                     if(res.code==200){
                         tableIns.reload();
                     }
@@ -278,7 +278,7 @@
             var checkStatus = table.checkStatus('noticeTable'); //noticeTable 即为基础参数 id 对应的值
             var dataLength=checkStatus.data.length;//获取数据长度
             if(dataLength >0){
-                layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
+                layer.confirm('你确定要删除这些公告吗?', {icon: 3, title:'提示'}, function(index){
                     //do something
                     var data=checkStatus.data ;//获取选中行的数据
                     var ids="";
@@ -291,7 +291,7 @@
                         }
                     });
 
-                    $.post("/log/batchDeleteNotice",ids,function(res){
+                    $.post("/notice/batchDeleteNotice",ids,function(res){
                         if(res.code==200){
                             tableIns.reload();
                         }
