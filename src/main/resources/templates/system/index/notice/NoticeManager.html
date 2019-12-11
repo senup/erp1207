@@ -103,6 +103,18 @@
 </div>
 <!--添加和修改的弹出层结束-->
 
+<!--查看弹出层的开始-->
+<div style="display: none;padding: 5px" id="showNoticeDiv">
+    <h2 id="show_title" align="center"></h2>
+    <div style="text-align: right">
+        发布人：<span id="show_opername"></span>
+        发布时间：<span id="show_createtime"></span>
+    </div>
+    <hr>
+    <div id="show_content"></div>
+</div>
+<!--查看弹出层的结束-->
+
 <script type="text/javascript" src="/layuicms2.0/layui/layui.js"></script>
 <script type="text/javascript">
     layui.use(['jquery','form','table','layer','laydate','layedit'],function () {
@@ -302,11 +314,23 @@
             }else {
                 layer.msg("请选中操作行")
             }
-
-
-            
         }
 
+        //弹出查看层
+        function showNotice(data) {
+            mainIndex=layer.open({
+                type:1,
+                content:$("#showNoticeDiv"),
+                area:['800px','600px'],
+                title:'查看公告',
+                success: function(){
+                    $("#show_title").html(data.title);
+                    $("#show_opername").html(data.opername);
+                    $("#show_createtime").html(data.createtime);
+                    $("#show_content").html(data.content);
+                }
+            });
+        }
     })
 </script>
 </body>
