@@ -76,14 +76,42 @@
     </div>
 </div>
 <!--数据表格结束-->
+
+<!--添加和修改的弹出层开始-->
+<div style="display: none;padding: 5px" id="addOrUpdateDiv">
+    <form id="dataForm" lay-filter="dataForm" class="layui-form layui-form-pane" action="" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">公告标题</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="id">
+                <input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="请输入标题" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公告内容</label>
+            <div class="layui-input-block">
+                <textarea class="layui-textarea" name="content"  id="content"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align: center">
+                <button type="button" class="layui-btn" lay-submit="" id="doSubmit"><span class="layui-icon layui-icon-add-1"></span>保存</button>
+                <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh"></span>重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!--添加和修改的弹出层结束-->
+
 <script type="text/javascript" src="/layuicms2.0/layui/layui.js"></script>
 <script type="text/javascript">
-    layui.use(['jquery','form','table','layer','laydate'],function () {
+    layui.use(['jquery','form','table','layer','laydate','layedit'],function () {
         var $=layui.jquery;
         var form=layui.form;
         var table=layui.table;
         var layer=layui.layer;
         var laydate=layui.laydate;
+        var layedit=layui.layedit;
         //初始化时间选择器
         laydate.render({
             elem:"#startTime",
@@ -94,7 +122,13 @@
             elem:"#endTime",
             type:"datetime"//容易把datetime写成dateTime出错导致时间选择器出错
         });
-        //加载数据
+
+        // 初始化富文本编辑器
+        //创建一个编辑器
+        var editIndex = layedit.build('content');
+
+
+       //加载数据
         var tableIns=table.render({
             elem: '#noticeTable'
             ,url:'/notice/loadAllNotice'
@@ -136,7 +170,7 @@
                     batchDelete();
                     break;
                 case 'add':
-                    add();
+                    openAddLayer();
                     break;
             };
         });
@@ -146,21 +180,84 @@
             var data = obj.data; //获得当前行数据
             switch(obj.event){
                 case 'update':
-                    deleteInfo(data);
+                    openUpdateNoticeLayer(data);
                     break;
                 case 'delete':
-                    deleteInfo(data);
+                    deleteNotice(data);
                     break;
                 case 'show':
-                    deleteInfo(data);
+                    showNotice(data);
                     break;
             };
         });
-        
-        //添加
-        function add() {
-            
+
+        //打开修改的弹出层
+        function openUpdateNoticeLayer(data) {
+            mainIndex=layer.open({
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['800px','600px'],
+                title:'修改公告',
+                success: function(){
+                    //重置数据
+                    $("#dataForm")[0].reset();
+                    //数据回显 标题+内容
+                    form.val("dataForm",data);
+                    layedit.setContent(editIndex,data.content);
+                    url="/notice/updateNotice";
+                }
+            });
         }
+
+       var mainIndex;
+        var url;
+        //添加
+        function openAddLayer() {
+            mainIndex=layer.open({
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['800px','600px'],
+                title:'发布公告',
+                success: function(){
+                    //数据清空
+                    $("#dataForm")[0].reset();
+                    layedit.setContent(editIndex,"");
+                    url="/notice/addNotice";
+                }
+            });
+        }
+
+        //添加和修改的提交
+//        form.on("submit(doSubmit)",function (data) {
+//            layedit.sync(editIndex);
+//            $.post(url,data.field,function (res) {
+//                if(res.code==200){
+//                    tableIns.reload();
+//                }
+//                layer.msg(res.msg);
+//                layer.close(mainIndex);
+//            });
+//            return false;
+//        });
+
+
+        //和上面的方法相比少了data
+        $("#doSubmit").click(function(){
+            //同步富文本编辑器里面的内容
+            layedit.sync(editIndex);
+            //创建以标准 URL 编码表示的文本字符串。如a=1&b=2&c=3&d=4&e=5
+            var data= $("#dataForm").serialize();
+//            alert(data);
+            $.post(url,data,function (res) {
+                if(res.code==200){
+                    tableIns.reload();
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            });
+            return false;
+        })
+
 
         //删除
         function deleteInfo(data){
