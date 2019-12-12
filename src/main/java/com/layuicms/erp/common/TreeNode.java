@@ -3,6 +3,7 @@ package com.layuicms.erp.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class TreeNode {
 	
 	private Integer id;
+	@JsonProperty("parentId")
 	private Integer pid;
 	private String title;
 	private String icon;
@@ -31,6 +33,11 @@ public class TreeNode {
 		this.href = href;
 		this.spread = spread;
 	}
-	
-	
+	//dtree复选
+	public TreeNode(Integer id, Integer pid, String title, Boolean spread) {
+		this.id = id;
+		this.pid = pid;
+		this.title = title;
+		this.spread = spread;
+	}
 }
