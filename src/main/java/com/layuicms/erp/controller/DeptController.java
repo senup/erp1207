@@ -31,16 +31,16 @@ public class DeptController {
     /**
      * 加载部门管理左边的部门树的json
      */
-    @RequestMapping("loadDeptManagerLeftTreeJson")
-    public DataGridView loadDeptManagerLeftTreeJson(DeptVo deptVo) {
+    @RequestMapping("loadLeft")
+    public DataGridView loadLeft(DeptVo deptVo) {
         List<Dept> list = this.deptService.list();
         List<TreeNode> treeNodes=new ArrayList<>();
 
         for (Dept dept : list) {
-            Boolean spread= dept.getOpen() == 1;
+            Boolean spread= dept.getOpen()==1?true:false;
             treeNodes.add(new TreeNode(dept.getId(), dept.getPid(), dept.getTitle(), spread));
         }
-        return new DataGridView(treeNodes);
+        return new DataGridView(200,"",0l,treeNodes);
     }
 }
 
